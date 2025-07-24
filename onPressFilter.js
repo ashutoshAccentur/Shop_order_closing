@@ -70,9 +70,24 @@ function showError(msg) {
 async function onFilterPress() {
     const plant = "5728";
     const material = getInputValue("material");
+    const orderNumber = getInputValue("orderNo");
+    const dateFrom = getInputValue("dateFrom");
+    const dateTo = getInputValue("dateTo");
 
-    const params = { plant };
-    if (material) params.material = material;
+    if (!material) {
+        showError("Material is mandatory.");
+        return;
+    }
+
+    if (dateFrom && dateTo && new Date(dateFrom) > new Date(dateTo)) {
+        showError("Date From cannot be later than Date To.");
+        return;
+    }
+
+    const params = { plant, material };
+    if (orderNumber) params.orderNumber = orderNumber;
+    if (dateFrom) params.dateFrom = dateFrom;
+    if (dateTo) params.dateTo = dateTo;
 
     const queryString = new URLSearchParams(params).toString();
     const apiUrl = `http://localhost:3000/api/orders?${queryString}`;
