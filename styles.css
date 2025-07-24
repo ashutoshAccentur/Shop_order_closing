@@ -1,0 +1,253 @@
+body {
+    background: #f6f7fb;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 1400px;
+    margin: 20px auto;
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(80, 107, 209, 0.12);
+    padding: 28px 32px;
+  }
+  
+  h1 {
+    margin-top: 0;
+    color: #274690;
+    letter-spacing: 1px;
+    font-size: 2.3rem;
+    font-weight: 700;
+  }
+  
+  .filters-card {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    margin-bottom: 28px;
+    background: #f1f5fa;
+    border-radius: 18px;
+    padding: 24px 20px 18px 20px;
+  }
+  
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 200px;
+  }
+  
+  .filter-group label {
+    font-size: 16px;
+    color: #223464;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  
+  input[type="text"],
+  input[type="date"],
+  input[type="number"] {
+    padding: 10px 12px;
+    font-size: 16px;
+    border: 1px solid #c3d0ec;
+    border-radius: 7px;
+    outline: none;
+    background: #fff;
+    transition: border-color .2s;
+  }
+  
+  input:focus {
+    border-color: #516eff;
+  }
+  
+  .primary-btn {
+    background: #274690;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  
+  .primary-btn:hover {
+    background: #516eff;
+  }
+  
+  .quantity-card {
+    margin: 24px 0 12px 0;
+    padding: 28px 24px;
+    background: #f7f9fd;
+    border-radius: 18px;
+    box-shadow: 0 4px 20px rgba(82, 115, 229, 0.10);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
+  .quantity-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+  }
+  
+  .quantity-row label {
+    font-size: 17px;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  
+  .quantity-row input[type="number"] {
+    width: 180px;
+    font-size: 15px;
+  }
+  
+  .btn-row {
+    display: flex;
+    gap: 15px;
+    margin-left: 28px;
+  }
+  
+  .success-btn {
+    background: #3fc267;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  
+  .success-btn:hover {
+    background: #24934c;
+  }
+  
+  .danger-btn {
+    background: #ff5757;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  
+  .danger-btn:hover {
+    background: #e83636;
+  }
+  
+  .discard-btn {
+    background: #ffb84d;
+    color: #453509;
+    border: none;
+    border-radius: 7px;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  
+  .discard-btn:hover {
+    background: #f1a335;
+  }
+  
+  .orders-card {
+    margin-top: 12px;
+    margin-bottom: 10px;
+  }
+  
+  .orders-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+    color: #24375c;
+    font-weight: 700;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    font-size: 15.5px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(80, 107, 209, .08);
+  }
+  
+  thead {
+    background: #e4eaf3;
+  }
+  
+  th,
+  td {
+    padding: 14px 10px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  th {
+    font-weight: 700;
+    color: #233664;
+    font-size: 16px;
+  }
+  
+  tr {
+    border-bottom: 1px solid #e3eaf7;
+  }
+  
+  .mat-desc {
+    color: #516eff;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .order-badge {
+    background: #e0f5e9;
+    color: #25a85c;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-block;
+  }
+  
+  .order-badge-grey {
+    background: #f0f1f5;
+    color: #6b6d7d;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-block;
+  }
+  
+  @media (max-width: 900px) {
+    .container {
+      padding: 16px 6px;
+    }
+    .filters-card {
+      gap: 10px;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .quantity-row {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 14px;
+    }
+    table {
+      font-size: 13px;
+    }
+  }
+  

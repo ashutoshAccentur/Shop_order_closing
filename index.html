@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Order Management Screen</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Order Management</h1>
+      <!-- Filter Section -->
+      <div class="filters-card">
+        <div class="filter-group">
+          <label for="material">Material</label>
+          <input
+            type="text"
+            id="material"
+            placeholder="Enter Material Code or Name"
+          />
+        </div>
+        <div class="filter-group">
+          <label for="orderNo">Order Number</label>
+          <input type="text" id="orderNo" placeholder="Enter Order Number" />
+        </div>
+        <div class="filter-group">
+          <label for="dateFrom">Date From</label>
+          <input type="date" id="dateFrom" placeholder="dd-mm-yyyy" />
+        </div>
+        <div class="filter-group">
+          <label for="dateTo">Date To</label>
+          <input type="date" id="dateTo" placeholder="dd-mm-yyyy" />
+        </div>
+        <button class="primary-btn" type="button" onclick="onFilterPress()">Filter</button>
+      </div>
+
+      <!-- Quantity Card -->
+      <div class="quantity-card">
+        <div class="quantity-row">
+          <label for="qty">Quantity</label>
+          <input type="number" id="qty" min="1" placeholder="Enter Quantity" />
+          <div class="btn-row">
+            <button class="danger-btn">Adjust Qty</button>
+            <button class="success-btn">Complete Order</button>
+            <button class="discard-btn">Discard Order</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Items Table -->
+      <div class="orders-card">
+        <h2>Items</h2>
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Order No</th>
+              <th>Parent SFC</th>
+              <th>Material & Description</th>
+              <th>Execution Status</th>
+              <th>Build Qty</th>
+              <th>Delivered Qty</th>
+              <th>Scheduled Start/End</th>
+              <th>Priority</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody">
+            <!-- Order rows will be inserted here dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Link your JS file here (make sure the file name and path are correct) -->
+    <script src="onPressFilter.js"></script>
+  </body>
+</html>
