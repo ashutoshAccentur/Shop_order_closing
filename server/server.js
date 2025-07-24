@@ -51,7 +51,7 @@ app.get('/api/orders', ensureToken, async (req, res) => {
     // Validate optional fields and build SAP params
     let params = { material: material.trim() };
     if (plant && plant.trim() !== '') params.plant = plant.trim();
-    if (orderNumber && orderNumber.trim() !== '') params.order = orderNumber.trim(); // <<<<--- FIXED LINE
+    if (orderNumber && orderNumber.trim() !== '') params.order = orderNumber.trim();
 
     // Date validation
     function isValidDate(d) {
