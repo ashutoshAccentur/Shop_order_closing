@@ -74,7 +74,7 @@ app.get('/api/orders', ensureToken, async (req, res) => {
     }
 
     // Optional: Log outgoing params for debug
-    // console.log('Outgoing SAP API params:', params);
+     console.log('Outgoing SAP API params:', params);
 
     try {
         const apiResponse = await axios.get(apiUrl, {
@@ -82,6 +82,7 @@ app.get('/api/orders', ensureToken, async (req, res) => {
             params,
         });
         res.json(apiResponse.data);
+        console.log(apiResponse.data);
     } catch (error) {
         if (error.response && error.response.status === 401) {
             await fetchOAuthToken();
@@ -94,3 +95,4 @@ app.get('/api/orders', ensureToken, async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Backend server running on http://localhost:${PORT}`);
 });
+

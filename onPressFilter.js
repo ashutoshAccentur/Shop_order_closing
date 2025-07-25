@@ -6,11 +6,8 @@ function getInputValue(id) {
 // Helper: Format date for UI display
 function formatDate(dateStr) {
     if (!dateStr) return "-";
-    const d = new Date(dateStr);
-    return d.toLocaleString("en-US", {
-        year: 'numeric', month: 'short', day: '2-digit',
-        hour: '2-digit', minute: '2-digit', hour12: true
-    });
+    const d = new Date(dateStr).toLocaleString();
+    return d;
 }
 
 // Map API response object to UI fields
@@ -36,6 +33,12 @@ function mapOrderApiToUiRow(orderApiObj) {
 // Render orders in the table
 function updateOrdersTable(dataArray) {
     const tbody = document.querySelector("#ordersTableBody");
+    const heading = document.getElementById("itemsHeading"); // Update heading with count
+    
+    // Calculate and update Items count
+    let count = dataArray && dataArray.length ? dataArray.length : 0;
+    heading.textContent = `Items (${count.toString().padStart(2, "0")})`;
+
     tbody.innerHTML = "";
 
     if (!dataArray || dataArray.length === 0) {
@@ -98,8 +101,22 @@ async function onFilterPress() {
 
         let apiData = await response.json();
         const ordersList = apiData.content || [];
-
-        const uiRows = ordersList.map(mapOrderApiToUiRow);
+        let updatedArr = [];
+        if(dateFrom && dateTo) {
+           ordersList.map((item)=>{
+            if(item.scheduledStartDate && item.scheduledCompletionDate) {
+                if(new Date(item.scheduledStartDate) >= new Date(dateFrom) && new Date(item.scheduledCompletionDate) <= new Date(dateTo)) {
+                    updatedArr.push(item);
+                }
+            }
+           })
+        }
+        else {
+            updatedArr = ordersList;
+        }
+        console.log("API Response:", ordersList);
+        
+        const uiRows = updatedArr.map(mapOrderApiToUiRow);
         updateOrdersTable(uiRows);
 
     } catch (e) {
