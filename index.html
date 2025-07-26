@@ -11,12 +11,24 @@
       <!-- Filter Section -->
       <div class="filters-card">
         <div class="filter-group">
-          <label for="material">Material</label>
+          <label for="material">Material <span style="color:red;">*</span></label>
           <input
             type="text"
             id="material"
             placeholder="Enter Material Code or Name"
           />
+        </div>
+        <div class="filter-group">
+          <label for="executionStatus">Execution Status</label>
+          <select id="executionStatus" required>
+            <option value="">Select Execution Status</option>
+            <option value="NOT_IN_EXECUTION">Not In Execution</option>
+            <option value="ACTIVE">Active</option>
+            <option value="HOLD">Hold</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="CLOSED">Closed</option>
+            <option value="DISCARDED">Discarded</option>
+          </select>
         </div>
         <div class="filter-group">
           <label for="orderNo">Order Number</label>

@@ -58,6 +58,20 @@ body {
     background: #fff;
     transition: border-color .2s;
   }
+
+  select {
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 1px solid #c3d0ec;
+  border-radius: 7px;
+  background: #fff;
+  outline: none;
+  transition: border-color .2s;
+}
+
+select:focus {
+  border-color: #516eff;
+}
   
   input:focus {
     border-color: #516eff;
