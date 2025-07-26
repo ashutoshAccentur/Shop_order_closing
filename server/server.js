@@ -41,7 +41,7 @@ app.get('/api/orders', ensureToken, async (req, res) => {
     const apiUrl = 'https://api.test.us20.dmc.cloud.sap/order/v1/orders/list';
 
     // Gather the parameters from frontend
-    const { plant, material, orderNumber, dateFrom, dateTo } = req.query;
+    const { plant, material, executionStatus, orderNumber, dateFrom, dateTo } = req.query;
 
     // Validate mandatory 'material' parameter
     if (!material || typeof material !== 'string' || material.trim() === '') {
@@ -52,6 +52,9 @@ app.get('/api/orders', ensureToken, async (req, res) => {
     let params = { material: material.trim() };
     if (plant && plant.trim() !== '') params.plant = plant.trim();
     if (orderNumber && orderNumber.trim() !== '') params.order = orderNumber.trim();
+    if (executionStatus && executionStatus.trim() !== '') params.executionStatus = executionStatus.trim();
+    // if (dateFrom && dateFrom.trim() !== '') params.dateFrom = dateFrom.trim();
+    // if (dateTo && dateTo.trim() !== '') params.dateTo = dateTo.trim();
 
     // Date validation
     function isValidDate(d) {

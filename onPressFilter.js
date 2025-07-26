@@ -76,6 +76,7 @@ async function onFilterPress() {
     const orderNumber = getInputValue("orderNo");
     const dateFrom = getInputValue("dateFrom");
     const dateTo = getInputValue("dateTo");
+    const executionStatus = document.getElementById("executionStatus").value;
 
     if (!material) {
         showError("Material is mandatory.");
@@ -91,6 +92,7 @@ async function onFilterPress() {
     if (orderNumber) params.orderNumber = orderNumber;
     if (dateFrom) params.dateFrom = dateFrom;
     if (dateTo) params.dateTo = dateTo;
+    if (executionStatus) params.executionStatus = executionStatus;  // <-- NEW LINE
 
     const queryString = new URLSearchParams(params).toString();
     const apiUrl = `http://localhost:3000/api/orders?${queryString}`;
@@ -100,22 +102,28 @@ async function onFilterPress() {
         if (!response.ok) throw new Error("No orders found.");
 
         let apiData = await response.json();
-        const ordersList = apiData.content || [];
+        let ordersList = apiData.content || [];
         let updatedArr = [];
+
+        // Date filtering (client side, as fallback if backend ignores dates)
         if(dateFrom && dateTo) {
-           ordersList.map((item)=>{
-            if(item.scheduledStartDate && item.scheduledCompletionDate) {
-                if(new Date(item.scheduledStartDate) >= new Date(dateFrom) && new Date(item.scheduledCompletionDate) <= new Date(dateTo)) {
-                    updatedArr.push(item);
-                }
-            }
-           })
-        }
-        else {
+            updatedArr = ordersList.filter(item =>
+                item.scheduledStartDate && item.scheduledCompletionDate &&
+                new Date(item.scheduledStartDate) >= new Date(dateFrom) &&
+                new Date(item.scheduledCompletionDate) <= new Date(dateTo)
+            );
+        } else {
             updatedArr = ordersList;
         }
+
+        // Execution Status filtering (client-side fallback)
+        if (executionStatus) {
+            updatedArr = updatedArr.filter(item =>
+                item.executionStatus && item.executionStatus === executionStatus
+            );
+        }
+
         console.log("API Response:", ordersList);
-        
         const uiRows = updatedArr.map(mapOrderApiToUiRow);
         updateOrdersTable(uiRows);
 
@@ -124,3 +132,4 @@ async function onFilterPress() {
         updateOrdersTable([]);
     }
 }
+
