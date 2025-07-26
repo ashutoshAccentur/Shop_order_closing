@@ -1,16 +1,19 @@
 // Helper: Get value from input by ID
+// Returns the trimmed string value of the specified input field
 function getInputValue(id) {
     return document.getElementById(id).value.trim();
 }
 
 // Helper: Format date for UI display
+// Converts a date string to a readable locale string, or returns "-" if empty/invalid
 function formatDate(dateStr) {
     if (!dateStr) return "-";
     const d = new Date(dateStr).toLocaleString();
     return d;
 }
 
-// Map API response object to UI fields
+// Mapper: Transforms a single API order object into the UI row object
+// Ensures required fields are shown (or "-" if missing) and formats fields for display
 function mapOrderApiToUiRow(orderApiObj) {
     return {
         orderNo: orderApiObj.order || "-",
@@ -30,22 +33,26 @@ function mapOrderApiToUiRow(orderApiObj) {
     };
 }
 
-// Render orders in the table
+// Render: Updates the HTML table with order data
+// Also updates the Items count in the heading
 function updateOrdersTable(dataArray) {
     const tbody = document.querySelector("#ordersTableBody");
     const heading = document.getElementById("itemsHeading"); // Update heading with count
     
-    // Calculate and update Items count
+    // Compute and display number of results, always as two digits
     let count = dataArray && dataArray.length ? dataArray.length : 0;
     heading.textContent = `Items (${count.toString().padStart(2, "0")})`;
 
+    // Clear any old table content
     tbody.innerHTML = "";
-
+    
+    // If no data, show "No orders found" row
     if (!dataArray || dataArray.length === 0) {
         tbody.innerHTML = `<tr><td colspan=\"9\">No orders found.</td></tr>`;
         return;
     }
 
+    // Loop through data array and add a table row for each order
     dataArray.forEach(orderObj => {
         const rowHtml = `
             <tr>
@@ -64,40 +71,46 @@ function updateOrdersTable(dataArray) {
     });
 }
 
-// Display Error
+// Utility: Display an error message (currently via alert, can replace with custom modal)
 function showError(msg) {
     alert(msg);
 }
 
-// MAIN FUNCTION
+// Main entry point: Called on Filter button press
+// Collects filters, validates them, builds query, fetches from backend, applies client-side fallback filtering, and updates UI
 async function onFilterPress() {
-    const plant = "5728";
+    const plant = "5728"; // Hardcoded plant code
     const material = getInputValue("material");
+    const executionStatus = document.getElementById("executionStatus").value;
     const orderNumber = getInputValue("orderNo");
     const dateFrom = getInputValue("dateFrom");
     const dateTo = getInputValue("dateTo");
-    const executionStatus = document.getElementById("executionStatus").value;
 
+    // Validate that material is present
     if (!material) {
         showError("Material is mandatory.");
         return;
     }
 
+    // Validate date range (if both provided)
     if (dateFrom && dateTo && new Date(dateFrom) > new Date(dateTo)) {
         showError("Date From cannot be later than Date To.");
         return;
     }
 
+    // Build request params object for backend API
     const params = { plant, material };
+    if (executionStatus) params.executionStatus = executionStatus;
     if (orderNumber) params.orderNumber = orderNumber;
     if (dateFrom) params.dateFrom = dateFrom;
     if (dateTo) params.dateTo = dateTo;
-    if (executionStatus) params.executionStatus = executionStatus;  // <-- NEW LINE
 
+    // Construct the backend API URL with all relevant query params
     const queryString = new URLSearchParams(params).toString();
     const apiUrl = `http://localhost:3000/api/orders?${queryString}`;
 
     try {
+        // Fetch order list from backend (proxy to SAP DMC API)
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error("No orders found.");
 
@@ -105,7 +118,7 @@ async function onFilterPress() {
         let ordersList = apiData.content || [];
         let updatedArr = [];
 
-        // Date filtering (client side, as fallback if backend ignores dates)
+        // Client-side filtering by date (as fallback if backend ignores/partial dates)
         if(dateFrom && dateTo) {
             updatedArr = ordersList.filter(item =>
                 item.scheduledStartDate && item.scheduledCompletionDate &&
@@ -116,18 +129,22 @@ async function onFilterPress() {
             updatedArr = ordersList;
         }
 
-        // Execution Status filtering (client-side fallback)
+        // Client-side filtering by execution status (as fallback)
         if (executionStatus) {
             updatedArr = updatedArr.filter(item =>
                 item.executionStatus && item.executionStatus === executionStatus
             );
         }
 
-        console.log("API Response:", ordersList);
+        // For debugging: log what was received from backend
+        //console.log("API Response:", ordersList);
+
+        // Map backend objects to UI rows and update table
         const uiRows = updatedArr.map(mapOrderApiToUiRow);
         updateOrdersTable(uiRows);
 
     } catch (e) {
+        // Handle error: show message and clear table
         showError(e.message);
         updateOrdersTable([]);
     }
