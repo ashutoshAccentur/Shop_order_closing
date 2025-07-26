@@ -12,9 +12,25 @@ function formatDate(dateStr) {
     return d;
 }
 
+// Helper: Get correct UOM from orderApiObj, fallback to known fields
+function getOrderUOM(orderApiObj) {
+    if (orderApiObj.productionUnitOfMeasureObject && orderApiObj.productionUnitOfMeasureObject.uom) {
+        return orderApiObj.productionUnitOfMeasureObject.uom;
+    }
+    if (orderApiObj.erpUnitOfMeasure) {
+        return orderApiObj.erpUnitOfMeasure;
+    }
+    if (orderApiObj.baseUnitOfMeasureObject && orderApiObj.baseUnitOfMeasureObject.uom) {
+        return orderApiObj.baseUnitOfMeasureObject.uom;
+    }
+    return "";
+}
+
 // Mapper: Transforms a single API order object into the UI row object
 // Ensures required fields are shown (or "-" if missing) and formats fields for display
 function mapOrderApiToUiRow(orderApiObj) {
+    const uom = getOrderUOM(orderApiObj);
+    
     return {
         orderNo: orderApiObj.order || "-",
         parentSFC: "-",
@@ -22,12 +38,10 @@ function mapOrderApiToUiRow(orderApiObj) {
             ? `${orderApiObj.material.material} / ${orderApiObj.material.version}<br><span class=\"mat-desc\">${orderApiObj.material.description}</span>`
             : "-",
         executionStatus: orderApiObj.executionStatus || "-",
-        buildQty: orderApiObj.buildQuantity !== undefined && orderApiObj.productionUnitOfMeasure
-            ? `${orderApiObj.buildQuantity} ${orderApiObj.productionUnitOfMeasure}`
-            : "-",
-        productionQty: orderApiObj.productionQuantity !== undefined && orderApiObj.productionUnitOfMeasure
-            ? `${orderApiObj.productionQuantity} ${orderApiObj.productionUnitOfMeasure}`
-            : "-",
+        buildQty: orderApiObj.buildQuantity !== undefined
+            ? `${orderApiObj.buildQuantity} ${uom}` : "-",
+        doneQty: orderApiObj.doneQuantity !== undefined
+            ? `${orderApiObj.doneQuantity} ${uom}` : "-",
         scheduledStartEnd: `${formatDate(orderApiObj.scheduledStartDate)}<br>${formatDate(orderApiObj.scheduledCompletionDate)}`,
         priority: orderApiObj.priority || "-"
     };
@@ -62,7 +76,7 @@ function updateOrdersTable(dataArray) {
                 <td>${orderObj.materialAndDesc}</td>
                 <td>${orderObj.executionStatus}</td>
                 <td>${orderObj.buildQty}</td>
-                <td>${orderObj.productionQty}</td>
+                <td>${orderObj.doneQty}</td>
                 <td>${orderObj.scheduledStartEnd}</td>
                 <td>${orderObj.priority}</td>
             </tr>
